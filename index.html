@@ -89,14 +89,14 @@
         .stat-bar-fill { height: 100%; background: var(--osiris-gold); width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
         .stat-bar-fill::after { content: ''; position: absolute; right: 0; top: -2px; width: 4px; height: 10px; background: #fff; box-shadow: 0 0 5px #fff; }
 
-        /* Hissatsu Cards (Clickable) */
+        /* Hissatsu Cards */
         .hissatsu-container { display: grid; gap: 1rem; }
         .hissatsu-card {
             background: linear-gradient(90deg, rgba(0,0,0,0.8), rgba(42, 10, 59, 0.4));
             border-right: 4px solid #333; padding: 1.5rem;
             display: flex; align-items: center; gap: 1.5rem;
             transition: all 0.3s; position: relative; overflow: hidden;
-            cursor: pointer; /* Indique que c'est cliquable */
+            cursor: pointer;
         }
         .hissatsu-card:hover { transform: translateX(10px); border-right-color: var(--osiris-gold); background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(255, 215, 0, 0.2)); }
         .hissatsu-card::after { content: '\f00e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 2rem; color: rgba(255,255,255,0.1); transition: 0.3s; }
@@ -112,60 +112,37 @@
         .tag.forbidden { background: var(--shadow-purple); color: #d8b4fe; border: 1px solid #d8b4fe; }
         .tag.def { background: #0066CC; color: #fff; }
 
-        /* Lore Box */
-        .lore-box { border: 1px dashed rgba(255, 215, 0, 0.3); padding: 2rem; background: rgba(0,0,0,0.3); position: relative; }
+        /* Lore Box & Details */
+        .lore-box { border: 1px dashed rgba(255, 215, 0, 0.3); padding: 2rem; background: rgba(0,0,0,0.3); position: relative; display: flex; flex-direction: column; gap: 2rem; }
         .lore-box::before { content: 'DOSSIER CONFIDENTIEL'; position: absolute; top: -10px; left: 20px; background: var(--void-bg); padding: 0 10px; color: var(--osiris-gold); font-family: var(--font-tech); font-size: 0.8rem; }
 
-        /* === MODAL (FENÊTRE POP-UP) === */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: none; /* Caché par défaut */
-            justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        .lore-section h3 { color: var(--osiris-gold); font-family: var(--font-tech); font-size: 1.1rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 0.5rem; }
+        .lore-section p { text-align: justify; line-height: 1.7; color: #ddd; font-size: 1rem; }
+
+        .lore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+        .lore-item { background: rgba(255,255,255,0.05); padding: 0.8rem; border-left: 2px solid var(--hologram-blue); }
+        .lore-item span { display: block; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .lore-item strong { color: #fff; font-size: 1rem; }
+
+        /* === MODAL === */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-
-        .modal-box {
-            background: #0a0a0a;
-            width: 90%; max-width: 800px;
-            border: 2px solid var(--osiris-gold);
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
-            position: relative;
-            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            clip-path: polygon(5% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%);
-        }
+        .modal-box { background: #0a0a0a; width: 90%; max-width: 800px; border: 2px solid var(--osiris-gold); box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); position: relative; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); clip-path: polygon(5% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%); }
         .modal-overlay.active .modal-box { transform: scale(1); }
-
-        .modal-header {
-            background: linear-gradient(90deg, var(--osiris-gold), transparent);
-            padding: 1rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .modal-header { background: linear-gradient(90deg, var(--osiris-gold), transparent); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
         .modal-title { font-family: var(--font-tech); color: #000; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; }
         .modal-close { cursor: pointer; font-size: 2rem; color: #000; transition: 0.3s; }
         .modal-close:hover { color: #fff; }
-
         .modal-body { padding: 0; position: relative; }
-        .modal-img-container {
-            width: 100%; height: 400px;
-            background: #000;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
-            border-bottom: 1px solid #333;
-        }
+        .modal-img-container { width: 100%; height: 400px; background: #000; display: flex; justify-content: center; align-items: center; overflow: hidden; border-bottom: 1px solid #333; }
         .modal-img-container img { width: 100%; height: 100%; object-fit: cover; }
-
         .modal-desc-box { padding: 1.5rem 2rem; }
         .modal-desc-text { color: #ccc; font-size: 1.1rem; line-height: 1.6; }
 
-        /* Responsive */
         @media (max-width: 900px) {
             .main-interface { grid-template-columns: 1fr; }
             .player-card { position: relative; top: 0; max-width: 500px; margin: 0 auto; }
-            .modal-img-container { height: 250px; }
+            .lore-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -236,112 +213,102 @@
             </div>
         </div>
 
-        <!-- Techniques Spéciales (CLICKABLE) -->
+        <!-- Techniques Spéciales -->
         <div class="panel-header" style="margin-top: 2rem;">
             <h2>Arsenal Hissatsu</h2>
             <p style="font-size: 0.9rem; color: var(--osiris-gold);"><i class="fas fa-info-circle"></i> Cliquez sur une technique pour visualiser</p>
         </div>
 
         <div class="hissatsu-container">
-
-            <!-- Technique 1 -->
-            <div class="hissatsu-card"
-                 data-title="Shadow Take"
-                 data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu. L'adversaire a l'impression que le ballon a simplement disparu."
-                 data-image="https://via.placeholder.com/800x400/2a0a3b/fff?text=SHADOW+TAKE+VISUAL">
-
-                <div class="move-icon" style="border-color: var(--shadow-purple); color: var(--shadow-purple);">
-                    <i class="fas fa-ghost"></i>
-                </div>
-                <div class="move-info">
-                    <div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div>
-                    <div class="move-desc">Vol de balle par manipulation d'ombre.</div>
-                </div>
+            <div class="hissatsu-card" data-title="Shadow Take" data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu." data-image="https://via.placeholder.com/800x400/2a0a3b/fff?text=SHADOW+TAKE+VISUAL">
+                <div class="move-icon" style="border-color: var(--shadow-purple); color: var(--shadow-purple);"><i class="fas fa-ghost"></i></div>
+                <div class="move-info"><div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div><div class="move-desc">Vol de balle par manipulation d'ombre.</div></div>
                 <div class="move-type">DEF</div>
             </div>
 
-            <!-- Technique 2 -->
-            <div class="hissatsu-card"
-                 data-title="Rempart du Phénix"
-                 data-desc="Akira invoque des flammes bleues qui prennent la forme d'ailes protectrices. Non seulement le tir est stoppé net, mais la chaleur dégagée régénère le moral des coéquipiers proches."
-                 data-image="https://via.placeholder.com/800x400/ff003c/fff?text=REMPART+DU+PHENIX">
-
-                <div class="move-icon" style="border-color: var(--danger-red); color: var(--danger-red);">
-                    <i class="fas fa-fire-alt"></i>
-                </div>
-                <div class="move-info">
-                    <div class="move-name">Rempart du Phénix</div>
-                    <div class="move-desc">Mur de flammes bleues régénératrices.</div>
-                </div>
+            <div class="hissatsu-card" data-title="Rempart du Phénix" data-desc="Un mur de flammes bleues qui incarne la renaissance. Stoppe le tir et régénère le moral de l'équipe." data-image="https://via.placeholder.com/800x400/ff003c/fff?text=REMPART+DU+PHENIX">
+                <div class="move-icon" style="border-color: var(--danger-red); color: var(--danger-red);"><i class="fas fa-fire-alt"></i></div>
+                <div class="move-info"><div class="move-name">Rempart du Phénix</div><div class="move-desc">Mur de flammes bleues régénératrices.</div></div>
                 <div class="move-type">DEF</div>
             </div>
 
-            <!-- Esprit Guerrier -->
-            <div class="hissatsu-card"
-                 style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));"
-                 data-title="Keshin : RENGOKU"
-                 data-desc="L'Esprit Guerrier Rengoku apparaît derrière Akira. C'est un dragon squelettique enveloppé de flammes dorées. Il augmente drastiquement la puissance défensive et permet de manipuler les âmes du terrain."
-                 data-image="https://via.placeholder.com/800x400/FFD700/000?text=KESHIN+RENGOKU">
-
-                <div class="move-icon" style="background: var(--osiris-gold); color: #000;">
-                    <i class="fas fa-dragon"></i>
-                </div>
-                <div class="move-info">
-                    <div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div>
-                    <div class="move-desc">Invocation de l'Esprit Guerrier Suprême.</div>
-                </div>
+            <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : RENGOKU" data-desc="Invocation de l'Esprit Guerrier Suprême. Dragon squelettique de feu." data-image="https://via.placeholder.com/800x400/FFD700/000?text=KESHIN+RENGOKU">
+                <div class="move-icon" style="background: var(--osiris-gold); color: #000;"><i class="fas fa-dragon"></i></div>
+                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div><div class="move-desc">Invocation de l'Esprit Guerrier Suprême.</div></div>
                 <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN</div>
             </div>
         </div>
 
-        <!-- Lore -->
+        <!-- Lore / Histoire (ENRICHI) -->
         <div class="panel-header" style="margin-top: 2rem;">
             <h2>Archives Mnésiques</h2>
         </div>
+
         <div class="lore-box">
-            <p style="margin-bottom: 1rem;">
-                <strong><i class="fas fa-database"></i> Origine :</strong> Centre de Formation d'Osiris (Secteur des Ombres).
-            </p>
-            <p style="text-align: justify; line-height: 1.8;">
-                Akira n'est pas une étrangère recrutée, mais une enfant des sables. Formée au sein même de la structure impitoyable d'<strong>Osiris</strong>, elle a appris à défendre non pas sur du gazon, mais dans la mouvance imprévisible des dunes. L'incident fondateur de ses 12 ans, où elle a arrêté un tir à bout portant pour protéger un camarade, lui a valu sa place titulaire.
-            </p>
+            <!-- Section Psychologie -->
+            <div class="lore-section">
+                <h3><i class="fas fa-brain"></i> Profil Psychologique</h3>
+                <p>
+                    Akira est une jeune fille calme et analytique qui préfère observer la situation avant d'agir. Souvent perçue comme froide ou impassible au premier abord, elle cache en réalité une profonde empathie et une loyauté sans faille envers sa "famille" d'Osiris.
+                    Sur le terrain, c'est une leader silencieuse. Elle ne crie pas pour donner des ordres, mais inspire le respect par ses actions. Sa philosophie est celle de la protection absolue : elle est le bouclier qui permet aux autres de s'élever.
+                </p>
+            </div>
+
+            <!-- Section Histoire -->
+            <div class="lore-section">
+                <h3><i class="fas fa-history"></i> Historique Crypté</h3>
+                <p>
+                    Enfant des sables, Akira a été formée au sein de la structure impitoyable d'Osiris. L'incident fondateur de ses 12 ans, où elle a arrêté un tir à bout portant pour protéger un camarade plus faible lors d'un rituel de sélection, a révélé son potentiel. C'est cet acte de protection pure, utilisant inconsciemment l'énergie spirituelle du lieu, qui lui a valu sa place titulaire et son surnom de "Rempart Silencieux".
+                </p>
+            </div>
+
+            <!-- Section Affinités / Goûts -->
+            <div class="lore-section">
+                <h3><i class="fas fa-fingerprint"></i> Traits Personnels</h3>
+                <div class="lore-grid">
+                    <div class="lore-item">
+                        <span>Aime</span>
+                        <strong>Le silence, L'observation, La loyauté</strong>
+                    </div>
+                    <div class="lore-item">
+                        <span>N'aime pas</span>
+                        <strong>L'injustice, Le bruit inutile, La trahison</strong>
+                    </div>
+                    <div class="lore-item">
+                        <span>Signe Distinctif</span>
+                        <strong>Yeux jaunes perçants (Vigilance)</strong>
+                    </div>
+                    <div class="lore-item">
+                        <span>Devise</span>
+                        <strong>"Le football sert à protéger."</strong>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
 </div>
 
-<!-- === STRUCTURE DE LA MODALE === -->
+<!-- MODAL -->
 <div class="modal-overlay" id="hissatsuModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h3 class="modal-title" id="modalTitle">Titre Technique</h3>
+            <h3 class="modal-title" id="modalTitle">Titre</h3>
             <div class="modal-close" id="modalClose">&times;</div>
         </div>
         <div class="modal-body">
-            <div class="modal-img-container">
-                <img id="modalImg" src="" alt="Visualisation Technique">
-            </div>
-            <div class="modal-desc-box">
-                <p class="modal-desc-text" id="modalDesc">Description de la technique...</p>
-            </div>
+            <div class="modal-img-container"><img id="modalImg" src="" alt="Visualisation"></div>
+            <div class="modal-desc-box"><p class="modal-desc-text" id="modalDesc">Description...</p></div>
         </div>
     </div>
 </div>
 
 <script>
-    // === GESTION DES STATS ===
     window.addEventListener('load', () => {
         const bars = document.querySelectorAll('.stat-bar-fill');
-        bars.forEach(bar => {
-            setTimeout(() => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => { bar.style.width = width; }, 100);
-            }, 300);
-        });
+        bars.forEach(bar => { setTimeout(() => { const width = bar.style.width; bar.style.width = '0%'; setTimeout(() => { bar.style.width = width; }, 100); }, 300); });
     });
 
-    // === GESTION DE LA MODALE ===
     const modal = document.getElementById('hissatsuModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalImg = document.getElementById('modalImg');
@@ -349,35 +316,17 @@
     const closeBtn = document.getElementById('modalClose');
     const cards = document.querySelectorAll('.hissatsu-card');
 
-    // Ouvrir la modale au clic sur une carte
     cards.forEach(card => {
         card.addEventListener('click', () => {
-            // Récupérer les données depuis les attributs data-
-            const title = card.getAttribute('data-title');
-            const desc = card.getAttribute('data-desc');
-            const img = card.getAttribute('data-image');
-
-            // Remplir la modale
-            modalTitle.textContent = title;
-            modalDesc.textContent = desc;
-            modalImg.src = img;
-
-            // Afficher la modale
+            modalTitle.textContent = card.getAttribute('data-title');
+            modalDesc.textContent = card.getAttribute('data-desc');
+            modalImg.src = card.getAttribute('data-image');
             modal.classList.add('active');
         });
     });
 
-    // Fermer la modale (Bouton X)
-    closeBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
-    });
-
-    // Fermer la modale (Clic en dehors de la boîte)
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('active');
-        }
-    });
+    closeBtn.addEventListener('click', () => { modal.classList.remove('active'); });
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
 </script>
 </body>
 </html>
