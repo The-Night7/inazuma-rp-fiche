@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inazuma RP - Protocole OSIRIS : Akira</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* === CONFIGURATION DE L'UNIVERS OSIRIS === */
+        :root {
+            --void-bg: #050505;
+            --void-light: #1a1a1a;
+            --osiris-gold: #FFD700;
+            --osiris-glow: #ffaa00;
+            --shadow-purple: #2a0a3b;
+            --hologram-blue: #00f3ff;
+            --danger-red: #ff003c;
+
+            --clip-angle: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%);
+
+            --font-tech: 'Orbitron', sans-serif;
+            --font-data: 'Rajdhani', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--void-bg);
+            color: #fff;
+            font-family: var(--font-data);
+            overflow-x: hidden;
+            background-image:
+                    radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 60%),
+                    linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            min-height: 100vh;
+        }
+
+        /* === PARTICULES DE SABLE === */
+        .sand-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0; opacity: 0.3;
+            animation: sandShift 10s infinite linear;
+        }
+        @keyframes sandShift { 0% { background-position: 0 0; } 100% { background-position: 100px 100px; } }
+
+        /* === LAYOUT === */
+        .main-interface {
+            max-width: 1400px; margin: 0 auto; padding: 2rem;
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: 350px 1fr; gap: 2rem; align-items: start;
+        }
+
+        /* === COLONNE GAUCHE : CARTE JOUEUR === */
+        .player-card {
+            position: sticky; top: 2rem;
+            background: linear-gradient(145deg, rgba(20,20,20,0.95), rgba(40,30,10,0.95));
+            border: 1px solid var(--osiris-gold);
+            clip-path: var(--clip-angle);
+            padding: 1rem;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 0.5rem; }
+        .team-emblem { color: var(--osiris-gold); font-size: 1.5rem; text-shadow: 0 0 10px var(--osiris-glow); }
+        .player-number { font-family: var(--font-tech); font-size: 2rem; color: var(--osiris-gold); font-weight: 900; }
+        .photo-frame { position: relative; width: 100%; height: 400px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%); margin-bottom: 1rem; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .photo-frame:hover img { transform: scale(1.05); }
+        .element-badge { position: absolute; bottom: 10px; right: 10px; background: var(--danger-red); color: white; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%); font-size: 1.5rem; box-shadow: 0 0 15px var(--danger-red); }
+        .player-name h1 { font-family: var(--font-tech); font-size: 2.5rem; color: #fff; text-transform: uppercase; line-height: 1; }
+        .player-name span { font-family: var(--font-tech); color: var(--osiris-gold); font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; }
+        .status-bar { margin-top: 1rem; background: rgba(0,0,0,0.5); padding: 0.5rem; border-left: 3px solid var(--osiris-gold); }
+        .status-label { color: #888; font-size: 0.8rem; text-transform: uppercase; }
+        .status-value { font-size: 1.2rem; font-weight: 700; color: var(--hologram-blue); }
+
+        /* === COLONNE DROITE : DATA === */
+        .data-panel { display: flex; flex-direction: column; gap: 2rem; }
+        .panel-header h2 { font-family: var(--font-tech); font-size: 3rem; text-transform: uppercase; background: -webkit-linear-gradient(0deg, #fff, var(--osiris-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+        .panel-header p { color: #aaa; font-size: 1.2rem; letter-spacing: 1px; }
+
+        /* Stats HUD */
+        .stats-hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+        .stat-pod { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem; position: relative; overflow: hidden; }
+        .stat-pod::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--osiris-gold); box-shadow: 0 0 10px var(--osiris-gold); }
+        .stat-label { font-size: 0.9rem; color: #888; text-transform: uppercase; }
+        .stat-bar-container { height: 6px; background: #333; margin-top: 10px; width: 100%; }
+        .stat-bar-fill { height: 100%; background: var(--osiris-gold); width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
+        .stat-bar-fill::after { content: ''; position: absolute; right: 0; top: -2px; width: 4px; height: 10px; background: #fff; box-shadow: 0 0 5px #fff; }
+
+        /* Hissatsu Cards (Clickable) */
+        .hissatsu-container { display: grid; gap: 1rem; }
+        .hissatsu-card {
+            background: linear-gradient(90deg, rgba(0,0,0,0.8), rgba(42, 10, 59, 0.4));
+            border-right: 4px solid #333; padding: 1.5rem;
+            display: flex; align-items: center; gap: 1.5rem;
+            transition: all 0.3s; position: relative; overflow: hidden;
+            cursor: pointer; /* Indique que c'est cliquable */
+        }
+        .hissatsu-card:hover { transform: translateX(10px); border-right-color: var(--osiris-gold); background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(255, 215, 0, 0.2)); }
+        .hissatsu-card::after { content: '\f00e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 2rem; color: rgba(255,255,255,0.1); transition: 0.3s; }
+        .hissatsu-card:hover::after { color: var(--osiris-gold); opacity: 0.5; }
+
+        .move-type { font-family: var(--font-tech); font-weight: 900; font-size: 2.5rem; color: rgba(255,255,255,0.05); position: absolute; right: 60px; top: 50%; transform: translateY(-50%); z-index: 0; }
+        .move-icon { width: 60px; height: 60px; background: #222; border: 2px solid #555; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--osiris-gold); z-index: 1; transform: rotate(45deg); }
+        .move-icon i { transform: rotate(-45deg); }
+        .move-info { z-index: 1; }
+        .move-name { font-family: var(--font-tech); font-size: 1.4rem; color: #fff; margin-bottom: 0.2rem; }
+        .move-desc { color: #aaa; font-size: 0.9rem; }
+        .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 2px; text-transform: uppercase; font-weight: bold; margin-left: 10px; vertical-align: middle; }
+        .tag.forbidden { background: var(--shadow-purple); color: #d8b4fe; border: 1px solid #d8b4fe; }
+        .tag.def { background: #0066CC; color: #fff; }
+
+        /* Lore Box */
+        .lore-box { border: 1px dashed rgba(255, 215, 0, 0.3); padding: 2rem; background: rgba(0,0,0,0.3); position: relative; }
+        .lore-box::before { content: 'DOSSIER CONFIDENTIEL'; position: absolute; top: -10px; left: 20px; background: var(--void-bg); padding: 0 10px; color: var(--osiris-gold); font-family: var(--font-tech); font-size: 0.8rem; }
+
+        /* === MODAL (FENÊTRE POP-UP) === */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none; /* Caché par défaut */
+            justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-box {
+            background: #0a0a0a;
+            width: 90%; max-width: 800px;
+            border: 2px solid var(--osiris-gold);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+            position: relative;
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            clip-path: polygon(5% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%);
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--osiris-gold), transparent);
+            padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-family: var(--font-tech); color: #000; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; }
+        .modal-close { cursor: pointer; font-size: 2rem; color: #000; transition: 0.3s; }
+        .modal-close:hover { color: #fff; }
+
+        .modal-body { padding: 0; position: relative; }
+        .modal-img-container {
+            width: 100%; height: 400px;
+            background: #000;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+            border-bottom: 1px solid #333;
+        }
+        .modal-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .modal-desc-box { padding: 1.5rem 2rem; }
+        .modal-desc-text { color: #ccc; font-size: 1.1rem; line-height: 1.6; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-interface { grid-template-columns: 1fr; }
+            .player-card { position: relative; top: 0; max-width: 500px; margin: 0 auto; }
+            .modal-img-container { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sand-overlay"></div>
+
+<div class="main-interface">
+
+    <!-- CARTE JOUEUR -->
+    <aside class="player-card">
+        <div class="card-header">
+            <div class="team-emblem"><i class="fas fa-ankh"></i> OSIRIS</div>
+            <div class="player-number">04</div>
+        </div>
+
+        <div class="photo-frame">
+            <img src="img/photo_concentree.jpg" alt="Akira Katsuki" onerror="this.src='https://via.placeholder.com/400x600/111/FFD700?text=AKIRA'">
+            <div class="element-badge"><i class="fas fa-fire"></i></div>
+        </div>
+
+        <div class="player-name">
+            <h1>Akira</h1>
+            <span>Katsuki</span>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-label">Rôle Tactique</div>
+            <div class="status-value">DÉFENSEUSE / LIBÉRO</div>
+        </div>
+
+        <div class="status-bar" style="border-left-color: var(--shadow-purple);">
+            <div class="status-label">Capacité Spéciale</div>
+            <div class="status-value">MIXIMAX + KESHIN</div>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: center; opacity: 0.7; font-size: 0.8rem;">
+            <i class="fas fa-quote-left" style="color: var(--osiris-gold);"></i>
+            Je suis l'ombre qui protège la lumière.
+        </div>
+    </aside>
+
+    <!-- DONNÉES -->
+    <main class="data-panel">
+
+        <div class="panel-header">
+            <h2>Données Analytiques</h2>
+            <p>Synchronisation avec le Temple d'Osiris...</p>
+        </div>
+
+        <!-- Stats HUD -->
+        <div class="stats-hud">
+            <div class="stat-pod">
+                <div class="stat-label">Défense</div>
+                <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%"></div></div>
+            </div>
+            <div class="stat-pod">
+                <div class="stat-label">Physique</div>
+                <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 85%"></div></div>
+            </div>
+            <div class="stat-pod">
+                <div class="stat-label">Vitesse</div>
+                <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 70%"></div></div>
+            </div>
+            <div class="stat-pod">
+                <div class="stat-label">Esprit</div>
+                <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 92%"></div></div>
+            </div>
+        </div>
+
+        <!-- Techniques Spéciales (CLICKABLE) -->
+        <div class="panel-header" style="margin-top: 2rem;">
+            <h2>Arsenal Hissatsu</h2>
+            <p style="font-size: 0.9rem; color: var(--osiris-gold);"><i class="fas fa-info-circle"></i> Cliquez sur une technique pour visualiser</p>
+        </div>
+
+        <div class="hissatsu-container">
+
+            <!-- Technique 1 -->
+            <div class="hissatsu-card"
+                 data-title="Shadow Take"
+                 data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu. L'adversaire a l'impression que le ballon a simplement disparu."
+                 data-image="https://via.placeholder.com/800x400/2a0a3b/fff?text=SHADOW+TAKE+VISUAL">
+
+                <div class="move-icon" style="border-color: var(--shadow-purple); color: var(--shadow-purple);">
+                    <i class="fas fa-ghost"></i>
+                </div>
+                <div class="move-info">
+                    <div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div>
+                    <div class="move-desc">Vol de balle par manipulation d'ombre.</div>
+                </div>
+                <div class="move-type">DEF</div>
+            </div>
+
+            <!-- Technique 2 -->
+            <div class="hissatsu-card"
+                 data-title="Rempart du Phénix"
+                 data-desc="Akira invoque des flammes bleues qui prennent la forme d'ailes protectrices. Non seulement le tir est stoppé net, mais la chaleur dégagée régénère le moral des coéquipiers proches."
+                 data-image="https://via.placeholder.com/800x400/ff003c/fff?text=REMPART+DU+PHENIX">
+
+                <div class="move-icon" style="border-color: var(--danger-red); color: var(--danger-red);">
+                    <i class="fas fa-fire-alt"></i>
+                </div>
+                <div class="move-info">
+                    <div class="move-name">Rempart du Phénix</div>
+                    <div class="move-desc">Mur de flammes bleues régénératrices.</div>
+                </div>
+                <div class="move-type">DEF</div>
+            </div>
+
+            <!-- Esprit Guerrier -->
+            <div class="hissatsu-card"
+                 style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));"
+                 data-title="Keshin : RENGOKU"
+                 data-desc="L'Esprit Guerrier Rengoku apparaît derrière Akira. C'est un dragon squelettique enveloppé de flammes dorées. Il augmente drastiquement la puissance défensive et permet de manipuler les âmes du terrain."
+                 data-image="https://via.placeholder.com/800x400/FFD700/000?text=KESHIN+RENGOKU">
+
+                <div class="move-icon" style="background: var(--osiris-gold); color: #000;">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <div class="move-info">
+                    <div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div>
+                    <div class="move-desc">Invocation de l'Esprit Guerrier Suprême.</div>
+                </div>
+                <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN</div>
+            </div>
+        </div>
+
+        <!-- Lore -->
+        <div class="panel-header" style="margin-top: 2rem;">
+            <h2>Archives Mnésiques</h2>
+        </div>
+        <div class="lore-box">
+            <p style="margin-bottom: 1rem;">
+                <strong><i class="fas fa-database"></i> Origine :</strong> Centre de Formation d'Osiris (Secteur des Ombres).
+            </p>
+            <p style="text-align: justify; line-height: 1.8;">
+                Akira n'est pas une étrangère recrutée, mais une enfant des sables. Formée au sein même de la structure impitoyable d'<strong>Osiris</strong>, elle a appris à défendre non pas sur du gazon, mais dans la mouvance imprévisible des dunes. L'incident fondateur de ses 12 ans, où elle a arrêté un tir à bout portant pour protéger un camarade, lui a valu sa place titulaire.
+            </p>
+        </div>
+
+    </main>
+</div>
+
+<!-- === STRUCTURE DE LA MODALE === -->
+<div class="modal-overlay" id="hissatsuModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">Titre Technique</h3>
+            <div class="modal-close" id="modalClose">&times;</div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-img-container">
+                <img id="modalImg" src="" alt="Visualisation Technique">
+            </div>
+            <div class="modal-desc-box">
+                <p class="modal-desc-text" id="modalDesc">Description de la technique...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === GESTION DES STATS ===
+    window.addEventListener('load', () => {
+        const bars = document.querySelectorAll('.stat-bar-fill');
+        bars.forEach(bar => {
+            setTimeout(() => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => { bar.style.width = width; }, 100);
+            }, 300);
+        });
+    });
+
+    // === GESTION DE LA MODALE ===
+    const modal = document.getElementById('hissatsuModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalImg = document.getElementById('modalImg');
+    const modalDesc = document.getElementById('modalDesc');
+    const closeBtn = document.getElementById('modalClose');
+    const cards = document.querySelectorAll('.hissatsu-card');
+
+    // Ouvrir la modale au clic sur une carte
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Récupérer les données depuis les attributs data-
+            const title = card.getAttribute('data-title');
+            const desc = card.getAttribute('data-desc');
+            const img = card.getAttribute('data-image');
+
+            // Remplir la modale
+            modalTitle.textContent = title;
+            modalDesc.textContent = desc;
+            modalImg.src = img;
+
+            // Afficher la modale
+            modal.classList.add('active');
+        });
+    });
+
+    // Fermer la modale (Bouton X)
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // Fermer la modale (Clic en dehors de la boîte)
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>
