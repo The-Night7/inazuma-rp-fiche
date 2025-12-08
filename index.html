@@ -279,7 +279,7 @@
                 <p>
                     Akira est une jeune fille calme et analytique qui préfère observer la situation avant d'agir. Souvent perçue comme froide, elle cache une profonde empathie et une loyauté sans faille envers sa "famille" d'Osiris.
                 </p>
-                <!-- BOUTON HISTOIRE -->
+                <!-- BOUTON Psychologie -->
                 <button class="tech-btn" id="psyBtn">
                     <i class="fas fa-eye"></i> Accéder aux Archives Complètes
                 </button>
@@ -403,7 +403,7 @@
     const psyBtn = document.getElementById('psyBtn');
     const fullPsyData = document.getElementById('full-psy-data');
 
-    historyBtn.addEventListener('click', () => {
+    psyBtn.addEventListener('click', () => {
         modalTitle.textContent = "Dossier Classifié : Psyché";
         // On injecte le HTML complet (paragraphes)
         modalDesc.innerHTML = fullPsyData.innerHTML;
