@@ -124,20 +124,42 @@
         .lore-item span { display: block; font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .lore-item strong { color: #fff; font-size: 1rem; }
 
+        /* Bouton Histoire */
+        .tech-btn {
+            background: transparent;
+            border: 1px solid var(--osiris-gold);
+            color: var(--osiris-gold);
+            padding: 0.8rem 1.5rem;
+            font-family: var(--font-tech);
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        .tech-btn:hover { background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px var(--osiris-gold); transform: translateY(-2px); }
+
         /* === MODAL === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-box { background: #0a0a0a; width: 90%; max-width: 800px; border: 2px solid var(--osiris-gold); box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); position: relative; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); clip-path: polygon(5% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%); }
+        .modal-box { background: #0a0a0a; width: 90%; max-width: 800px; border: 2px solid var(--osiris-gold); box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); position: relative; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); clip-path: polygon(5% 0, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%); max-height: 90vh; display: flex; flex-direction: column; }
         .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-header { background: linear-gradient(90deg, var(--osiris-gold), transparent); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header { background: linear-gradient(90deg, var(--osiris-gold), transparent); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .modal-title { font-family: var(--font-tech); color: #000; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; }
         .modal-close { cursor: pointer; font-size: 2rem; color: #000; transition: 0.3s; }
         .modal-close:hover { color: #fff; }
-        .modal-body { padding: 0; position: relative; }
-        .modal-img-container { width: 100%; height: 400px; background: #000; display: flex; justify-content: center; align-items: center; overflow: hidden; border-bottom: 1px solid #333; }
+
+        .modal-body { padding: 0; position: relative; overflow-y: auto; /* Permet le scroll si le texte est long */ }
+
+        .modal-img-container { width: 100%; height: 300px; background: #000; display: flex; justify-content: center; align-items: center; overflow: hidden; border-bottom: 1px solid #333; flex-shrink: 0; }
         .modal-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-img-container.hidden { display: none; } /* Pour cacher l'image si besoin */
+
         .modal-desc-box { padding: 1.5rem 2rem; }
         .modal-desc-text { color: #ccc; font-size: 1.1rem; line-height: 1.6; }
+        .modal-desc-text p { margin-bottom: 1rem; } /* Espacement des paragraphes */
 
         @media (max-width: 900px) {
             .main-interface { grid-template-columns: 1fr; }
@@ -220,26 +242,32 @@
         </div>
 
         <div class="hissatsu-container">
-            <div class="hissatsu-card" data-title="Shadow Take" data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu." data-image="https://via.placeholder.com/800x400/2a0a3b/fff?text=SHADOW+TAKE+VISUAL">
+            <div class="hissatsu-card" data-title="Shadow Take" data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu." data-image="img/shadow_take.webp">
                 <div class="move-icon" style="border-color: var(--shadow-purple); color: var(--shadow-purple);"><i class="fas fa-ghost"></i></div>
-                <div class="move-info"><div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div><div class="move-desc">Vol de balle par manipulation d'ombre.</div></div>
-                <div class="move-type">DEF</div>
+                <div class="move-info"><div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div><div class="move-desc">Akira se fond dans son ombre est apparait devant la balle si la passe se fait dans le quart de terrain dans lequel elle se trouve.</div></div>
+                <div class="move-type">DEF | INTERCEPTION</div>
             </div>
 
             <div class="hissatsu-card" data-title="Rempart du Phénix" data-desc="Un mur de flammes bleues qui incarne la renaissance. Stoppe le tir et régénère le moral de l'équipe." data-image="https://via.placeholder.com/800x400/ff003c/fff?text=REMPART+DU+PHENIX">
                 <div class="move-icon" style="border-color: var(--danger-red); color: var(--danger-red);"><i class="fas fa-fire-alt"></i></div>
                 <div class="move-info"><div class="move-name">Rempart du Phénix</div><div class="move-desc">Mur de flammes bleues régénératrices.</div></div>
-                <div class="move-type">DEF</div>
+                <div class="move-type">DEF | BLOCAGE</div>
             </div>
 
-            <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : RENGOKU" data-desc="Invocation de l'Esprit Guerrier Suprême. Dragon squelettique de feu." data-image="https://via.placeholder.com/800x400/FFD700/000?text=KESHIN+RENGOKU">
+            <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : RENGOKU" data-desc="Invocation de l'Esprit Guerrier Suprême. Rengoku !" data-image="https://c.tenor.com/jvbPYIiSRr4AAAAd/tenor.gif">
                 <div class="move-icon" style="background: var(--osiris-gold); color: #000;"><i class="fas fa-dragon"></i></div>
-                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div><div class="move-desc">Invocation de l'Esprit Guerrier Suprême.</div></div>
-                <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN</div>
+                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div><div class="move-desc">Invocation de l'Esprit Guerrier de Feu.</div></div>
+                <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN | DEF</div>
+            </div>
+
+            <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : SET YOUR HEART ABLAZE" data-desc="Technique enflammant le corps de l'utilisatrice et améliorant sa vitesse, par la chaleur dégagée l'adversaire est soumis à la température d'une flamme blanche au contact, rouge sinon." data-image="https://c.tenor.com/erGD_tICRHwAAAAd/tenor.gif">
+                <div class="move-icon" style="background: var(--osiris-gold); color: #000;"><i class="fas fa-dragon"></i></div>
+                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : SET YOUR HEART ABLAZE</div><div class="move-desc">Technique de l'Esprit Guerrier de Feu.</div></div>
+                <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN | BLOCAGE</div>
             </div>
         </div>
 
-        <!-- Lore / Histoire (ENRICHI) -->
+        <!-- Lore / Histoire -->
         <div class="panel-header" style="margin-top: 2rem;">
             <h2>Archives Mnésiques</h2>
         </div>
@@ -249,44 +277,71 @@
             <div class="lore-section">
                 <h3><i class="fas fa-brain"></i> Profil Psychologique</h3>
                 <p>
-                    Akira est une jeune fille calme et analytique qui préfère observer la situation avant d'agir. Souvent perçue comme froide ou impassible au premier abord, elle cache en réalité une profonde empathie et une loyauté sans faille envers sa "famille" d'Osiris.
-                    Sur le terrain, c'est une leader silencieuse. Elle ne crie pas pour donner des ordres, mais inspire le respect par ses actions. Sa philosophie est celle de la protection absolue : elle est le bouclier qui permet aux autres de s'élever.
+                    Akira est une jeune fille calme et analytique qui préfère observer la situation avant d'agir. Souvent perçue comme froide, elle cache une profonde empathie et une loyauté sans faille envers sa "famille" d'Osiris.
                 </p>
+                <!-- BOUTON HISTOIRE -->
+                <button class="tech-btn" id="psyBtn">
+                    <i class="fas fa-eye"></i> Accéder aux Archives Complètes
+                </button>
             </div>
 
-            <!-- Section Histoire -->
+            <!-- Section Histoire Résumée + Bouton -->
             <div class="lore-section">
                 <h3><i class="fas fa-history"></i> Historique Crypté</h3>
                 <p>
-                    Enfant des sables, Akira a été formée au sein de la structure impitoyable d'Osiris. L'incident fondateur de ses 12 ans, où elle a arrêté un tir à bout portant pour protéger un camarade plus faible lors d'un rituel de sélection, a révélé son potentiel. C'est cet acte de protection pure, utilisant inconsciemment l'énergie spirituelle du lieu, qui lui a valu sa place titulaire et son surnom de "Rempart Silencieux".
+                    Enfant des sables, Akira a été formée au sein de la structure impitoyable d'Osiris. Son potentiel s'est éveillé lors d'un rituel de sélection violent.
                 </p>
+                <!-- BOUTON HISTOIRE -->
+                <button class="tech-btn" id="historyBtn">
+                    <i class="fas fa-eye"></i> Accéder aux Archives Complètes
+                </button>
             </div>
 
-            <!-- Section Affinités / Goûts -->
+            <!-- Section Affinités -->
             <div class="lore-section">
                 <h3><i class="fas fa-fingerprint"></i> Traits Personnels</h3>
                 <div class="lore-grid">
-                    <div class="lore-item">
-                        <span>Aime</span>
-                        <strong>Le silence, L'observation, La loyauté</strong>
-                    </div>
-                    <div class="lore-item">
-                        <span>N'aime pas</span>
-                        <strong>L'injustice, Le bruit inutile, La trahison</strong>
-                    </div>
-                    <div class="lore-item">
-                        <span>Signe Distinctif</span>
-                        <strong>Yeux jaunes perçants (Vigilance)</strong>
-                    </div>
-                    <div class="lore-item">
-                        <span>Devise</span>
-                        <strong>"Le football sert à protéger."</strong>
-                    </div>
+                    <div class="lore-item"><span>Aime</span><strong>Le silence, L'observation</strong></div>
+                    <div class="lore-item"><span>N'aime pas</span><strong>L'injustice, Le bruit inutile</strong></div>
+                    <div class="lore-item"><span>Signe Distinctif</span><strong>Yeux jaunes perçants</strong></div>
+                    <div class="lore-item"><span>Devise</span><strong>"Le football sert à protéger."</strong></div>
                 </div>
             </div>
         </div>
 
     </main>
+</div>
+
+<!-- CONTENU CACHÉ : HISTOIRE COMPLÈTE -->
+<div id="full-history-data" style="display: none;">
+    <p><strong>Chapitre 1 : L'Enfant des Dunes</strong><br>
+        Akira n'a jamais connu les terrains verts et entretenus. Née dans la périphérie du territoire d'Osiris, elle a grandi en jouant au football sur des sols instables, où le sable vole à chaque impact. Cette contrainte est devenue sa plus grande force : elle a appris à lire les mouvements du sol avant ceux du ballon.</p>
+
+    <p><strong>Chapitre 2 : Le Rituel du Jugement</strong><br>
+        À l'âge de 12 ans, lors du "Jugement d'Anubis", un tournoi interne brutal pour sélectionner les futurs élites, Akira n'était qu'une remplaçante. Mais lorsqu'un attaquant adverse, connu pour sa violence, a visé délibérément la tête d'un jeune coéquipier tombé au sol, Akira a agi sans réfléchir. Elle s'est jetée sur la trajectoire.</p>
+
+    <p>Ce n'est pas son corps qui a arrêté le ballon, mais une aura bleutée, froide et brûlante à la fois. Le ballon s'est figé net à un centimètre de sa poitrine avant de tomber inerte dans le sable. Les recruteurs d'Osiris, observant depuis les gradins ombragés, ont immédiatement compris : elle possédait une affinité naturelle avec les Esprits Guerriers.</p>
+
+    <p><strong>Chapitre 3 : L'Ombre d'Osiris</strong><br>
+        Intégrée à l'équipe principale, elle a dû abandonner son identité passée pour devenir "Le Rempart Silencieux". Elle a appris à maîtriser le "Shadow Take", une technique interdite permettant de se déplacer dans les angles morts de la vision humaine. Cependant, contrairement à ses pairs qui cherchent la domination, Akira utilise ces techniques sombres pour une cause noble : la protection absolue de ses buts et de ses alliés.</p>
+
+    <p>Aujourd'hui, alors que les époques se mélangent, Akira sent que son véritable test approche. Elle ne joue pas pour la gloire, mais pour prouver que même dans l'équipe la plus sombre, la lumière peut exister.</p>
+</div>
+
+<!-- CONTENU CACHÉ : PSYCHE COMPLÈTE -->
+<div id="full-psy-data" style="display: none;">
+    <p><strong>Analyse Comportementale</strong><br>
+        Akira est calme et analytique, observant toujours attentivement les situations avant de réagir. Cette approche méthodique lui permet d'anticiper les mouvements adverses et de prendre des décisions stratégiques optimales. Sa présence silencieuse sur le terrain masque une intelligence tactique exceptionnelle.</p>
+
+    <p><strong>Interactions Sociales</strong><br>
+        Souvent perçue comme froide ou distante par ceux qui ne la connaissent pas, Akira maintient délibérément cette façade. Derrière ce masque d'impassibilité se cache une loyauté féroce et une profonde empathie, particulièrement envers ceux qu'elle considère comme sa "famille" au sein d'Osiris.</p>
+
+    <p>Les rares personnes ayant gagné sa confiance témoignent d'une tout autre Akira : protectrice jusqu'à l'abnégation et capable d'une compassion surprenante. Elle considère la protection de son équipe comme sa mission personnelle, tant sur le terrain qu'en dehors.</p>
+
+    <p><strong>Approche Défensive</strong><br>
+        En tant que défenseuse centrale, Akira excelle dans la lecture du jeu. Sa capacité à anticiper les trajectoires et à intercepter les passes adverses semble parfois surnaturelle. Elle ne s'appuie pas sur la force brute mais sur une compréhension profonde des schémas de jeu.</p>
+
+    <p>Son sérieux et sa concentration inébranlable font d'elle un pilier défensif redoutable. Les attaquants qui l'ont affrontée parlent souvent de la sensation troublante d'être "lus" avant même d'avoir décidé de leur prochain mouvement. Cette vigilance constante, combinée à son engagement total, font d'Akira une barrière presque infranchissable sur le terrain.</p>
 </div>
 
 <!-- MODAL -->
@@ -297,34 +352,68 @@
             <div class="modal-close" id="modalClose">&times;</div>
         </div>
         <div class="modal-body">
-            <div class="modal-img-container"><img id="modalImg" src="" alt="Visualisation"></div>
-            <div class="modal-desc-box"><p class="modal-desc-text" id="modalDesc">Description...</p></div>
+            <div class="modal-img-container" id="modalImgContainer"><img id="modalImg" src="" alt="Visualisation"></div>
+            <div class="modal-desc-box"><div class="modal-desc-text" id="modalDesc">Description...</div></div>
         </div>
     </div>
 </div>
 
 <script>
+    // Animation Stats
     window.addEventListener('load', () => {
         const bars = document.querySelectorAll('.stat-bar-fill');
         bars.forEach(bar => { setTimeout(() => { const width = bar.style.width; bar.style.width = '0%'; setTimeout(() => { bar.style.width = width; }, 100); }, 300); });
     });
 
+    // Gestion Modale
     const modal = document.getElementById('hissatsuModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalImg = document.getElementById('modalImg');
+    const modalImgContainer = document.getElementById('modalImgContainer');
     const modalDesc = document.getElementById('modalDesc');
     const closeBtn = document.getElementById('modalClose');
-    const cards = document.querySelectorAll('.hissatsu-card');
 
+    // 1. Clic sur Techniques
+    const cards = document.querySelectorAll('.hissatsu-card');
     cards.forEach(card => {
         card.addEventListener('click', () => {
             modalTitle.textContent = card.getAttribute('data-title');
-            modalDesc.textContent = card.getAttribute('data-desc');
+            modalDesc.textContent = card.getAttribute('data-desc'); // Texte simple
             modalImg.src = card.getAttribute('data-image');
+            modalImgContainer.style.display = 'flex'; // Montrer l'image
             modal.classList.add('active');
         });
     });
 
+    // 2. Clic sur Histoire Complète
+    const historyBtn = document.getElementById('historyBtn');
+    const fullHistoryData = document.getElementById('full-history-data');
+
+    historyBtn.addEventListener('click', () => {
+        modalTitle.textContent = "Dossier Classifié : Origines";
+        // On injecte le HTML complet (paragraphes)
+        modalDesc.innerHTML = fullHistoryData.innerHTML;
+        // Image générique pour l'histoire ou on la cache
+        modalImg.src = "https://via.placeholder.com/800x400/000/FFD700?text=ARCHIVES+OSIRIS";
+        modalImgContainer.style.display = 'flex';
+        modal.classList.add('active');
+    });
+
+    // 3. Clic sur Psyché Complète
+    const psyBtn = document.getElementById('psyBtn');
+    const fullPsyData = document.getElementById('full-psy-data');
+
+    historyBtn.addEventListener('click', () => {
+        modalTitle.textContent = "Dossier Classifié : Psyché";
+        // On injecte le HTML complet (paragraphes)
+        modalDesc.innerHTML = fullPsyData.innerHTML;
+        // Image générique pour l'histoire ou on la cache
+        modalImg.src = "https://via.placeholder.com/800x400/000/FFD700?text=ARCHIVES+OSIRIS";
+        modalImgContainer.style.display = 'flex';
+        modal.classList.add('active');
+    });
+
+    // Fermeture
     closeBtn.addEventListener('click', () => { modal.classList.remove('active'); });
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
 </script>
