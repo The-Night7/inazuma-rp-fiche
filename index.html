@@ -112,6 +112,13 @@
         .tag.forbidden { background: var(--shadow-purple); color: #d8b4fe; border: 1px solid #d8b4fe; }
         .tag.def { background: #0066CC; color: #fff; }
 
+        /* === TAGS DE RANG === */
+        .tag.rank-d { background: #555; /* Gris foncé */ color: #fff; border: 1px solid #777; }
+        .tag.rank-c { background: #0066CC; /* Bleu */ color: #fff; border: 1px solid #005BB5; }
+        .tag.rank-b { background: #28a745; /* Vert */ color: #fff; border: 1px solid #218838; }
+        .tag.rank-a { background: #ffc107; /* Jaune */ color: #000; border: 1px solid #e0a800; }
+        .tag.rank-s { background: #dc3545; /* Rouge */ color: #fff; border: 1px solid #c82333; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+
         /* Lore Box & Details */
         .lore-box { border: 1px dashed rgba(255, 215, 0, 0.3); padding: 2rem; background: rgba(0,0,0,0.3); position: relative; display: flex; flex-direction: column; gap: 2rem; }
         .lore-box::before { content: 'DOSSIER CONFIDENTIEL'; position: absolute; top: -10px; left: 20px; background: var(--void-bg); padding: 0 10px; color: var(--osiris-gold); font-family: var(--font-tech); font-size: 0.8rem; }
@@ -244,25 +251,25 @@
         <div class="hissatsu-container">
             <div class="hissatsu-card" data-title="Shadow Take" data-desc="Technique ancestrale d'Osiris. L'utilisateur se fond dans les ombres du désert pour subtiliser le ballon sans être vu." data-image="img/shadow_take.webp">
                 <div class="move-icon" style="border-color: var(--shadow-purple); color: var(--shadow-purple);"><i class="fas fa-ghost"></i></div>
-                <div class="move-info"><div class="move-name">Shadow Take <span class="tag forbidden">Interdit</span></div><div class="move-desc">Akira se fond dans son ombre est apparait devant la balle si la passe se fait dans le quart de terrain dans lequel elle se trouve.</div></div>
+                <div class="move-info"><div class="move-name">Shadow Take <span class="tag rank-c">C</span> <span class="tag forbidden">Interdit</span></div><div class="move-desc">Akira se fond dans son ombre est apparait devant la balle si la passe se fait dans le quart de terrain dans lequel elle se trouve.</div></div>
                 <div class="move-type">DEF | INTERCEPTION</div>
             </div>
 
             <div class="hissatsu-card" data-title="Rempart du Phénix" data-desc="Un mur de flammes bleues qui incarne la renaissance. Stoppe le tir et régénère le moral de l'équipe." data-image="https://via.placeholder.com/800x400/ff003c/fff?text=REMPART+DU+PHENIX">
                 <div class="move-icon" style="border-color: var(--danger-red); color: var(--danger-red);"><i class="fas fa-fire-alt"></i></div>
-                <div class="move-info"><div class="move-name">Rempart du Phénix</div><div class="move-desc">Mur de flammes bleues régénératrices.</div></div>
+                <div class="move-info"><div class="move-name">Rempart du Phénix <span class="tag rank-c">C</span> </div><div class="move-desc">Mur de flammes bleues régénératrices.</div></div>
                 <div class="move-type">DEF | BLOCAGE</div>
             </div>
 
             <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : RENGOKU" data-desc="Invocation de l'Esprit Guerrier Suprême. Rengoku !" data-image="https://c.tenor.com/jvbPYIiSRr4AAAAd/tenor.gif">
                 <div class="move-icon" style="background: var(--osiris-gold); color: #000;"><i class="fas fa-dragon"></i></div>
-                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU</div><div class="move-desc">Invocation de l'Esprit Guerrier de Feu.</div></div>
+                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : RENGOKU <span class="tag rank-d">V1</span> </div><div class="move-desc">Invocation de l'Esprit Guerrier de Feu.</div></div>
                 <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN | DEF</div>
             </div>
 
             <div class="hissatsu-card" style="border-right: 4px solid var(--osiris-gold); background: linear-gradient(90deg, rgba(50,40,0,0.5), rgba(0,0,0,0.8));" data-title="Keshin : SET YOUR HEART ABLAZE" data-desc="Technique enflammant le corps de l'utilisatrice et améliorant sa vitesse, par la chaleur dégagée l'adversaire est soumis à la température d'une flamme blanche au contact, rouge sinon." data-image="https://c.tenor.com/erGD_tICRHwAAAAd/tenor.gif">
                 <div class="move-icon" style="background: var(--osiris-gold); color: #000;"><i class="fas fa-dragon"></i></div>
-                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : SET YOUR HEART ABLAZE</div><div class="move-desc">Technique de l'Esprit Guerrier de Feu.</div></div>
+                <div class="move-info"><div class="move-name" style="color: var(--osiris-gold);">Keshin : SET YOUR HEART ABLAZE <span class="tag rank-a">A</span> </div><div class="move-desc">Technique de l'Esprit Guerrier de Feu.</div></div>
                 <div class="move-type" style="color: rgba(255, 215, 0, 0.2);">KESHIN | BLOCAGE</div>
             </div>
         </div>
